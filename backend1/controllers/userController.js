@@ -482,7 +482,7 @@ exports.verifyAndUnlockPayment = async (req, res) => {
       });
       await receipt.save();
 
-      return res.status(200).json({ success: true, message: 'Payment verified & course unlocked', user, payment, receipt });
+      return res.status(200).json({ success: true, message: 'Payment verified & course unlocked', user, payment, receipt, enrolledCourses: user.enrolledCourses });
     }
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !courseId) {
@@ -583,7 +583,8 @@ exports.verifyAndUnlockPayment = async (req, res) => {
       message: "Payment verified & course unlocked",
       user: user,
       payment: payment,
-      receipt: receipt
+      receipt: receipt,
+      enrolledCourses: user.enrolledCourses
     });
 
   } catch (err) {
@@ -843,135 +844,3 @@ exports.verifyToken = async (req, res) => {
 
 
 
-exports.verifyAndUnlockPayment = async (req, res) => {
-  try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, courseId } = req.body;
-    console.log("✅ verifyAndUnlockPayment hit with courseId:", courseId);
-
-    // Validate required fields
-    if (!courseId) {
-      return res.status(400).json({
-        success: false,
-        message: "courseId is required"
-      });
-    }
-
-    // For production mode, validate payment fields
-    if (process.env.NODE_ENV !== 'development') {
-      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-        return res.status(400).json({
-          success: false,
-          message: "Payment verification fields are required"
-        });
-      }
-    }
-
-    // Development bypass - skip signature verification, use actual user from token
-    if (process.env.NODE_ENV === 'development' || (razorpay_order_id && razorpay_order_id.startsWith('dev_'))) {
-      console.log('🔧 Development mode - skipping payment verification');
-      console.log('🔍 Using user from token:', req.user);
-
-      // Find user by ID from token, or use/create demo user as fallback
-      let user = await User.findById(req.user.id);
-
-      if (!user) {
-        console.log('⚠️ User not found by token ID, using demo user fallback');
-
-        // Use a consistent demo user to avoid phoneNumber conflicts
-        const demoEmail = 'demo@test.com';
-        user = await User.findOneAndUpdate(
-          { email: demoEmail },
-          {
-            $setOnInsert: {
-              email: demoEmail,
-              phoneNumber: '9999999999',
-              name: 'Demo Student',
-              isEmailVerified: true,
-              isPhoneVerified: true,
-              city: 'Demo City',
-              gender: 'Male',
-              dob: new Date('1995-01-01'),
-              selectedCategory: 'CAT',
-              selectedExam: 'CAT 2025',
-              enrolledCourses: []
-            }
-          },
-          { upsert: true, new: true }
-        );
-
-        console.log('✅ Using demo user:', user._id);
-      }
-
-      // Add course to enrolled courses
-      console.log('🔍 Current enrolled courses before adding:', user.enrolledCourses);
-      const existingCourse = user.enrolledCourses.find(c => c.courseId && c.courseId.toString() === courseId);
-      console.log('🔍 Looking for existing course with ID:', courseId);
-      console.log('🔍 Existing course found:', existingCourse);
-
-      if (!existingCourse) {
-        user.enrolledCourses.push({
-          courseId,
-          status: "unlocked",
-          enrolledAt: new Date()
-        });
-        await user.save();
-        console.log('✅ Course unlocked for user:', user._id);
-        console.log('📚 Updated enrolled courses:', user.enrolledCourses);
-      } else {
-        // If an enrollment exists but is not unlocked, update it to unlocked
-        if (existingCourse.status !== 'unlocked') {
-          existingCourse.status = 'unlocked';
-          await user.save();
-          console.log('✅ Existing enrollment status updated to unlocked for user:', user._id);
-        } else {
-          console.log('ℹ️ Course already unlocked for user');
-        }
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: "Course unlocked successfully",
-        enrolledCourses: user.enrolledCourses
-      });
-    }
-
-    const key_secret = process.env.RAZORPAY_KEY_SECRET || "wlVOAREeWhLHJQrlDUr0iEn7";
-    const generated_signature = crypto
-      .createHmac("sha256", key_secret)
-      .update(razorpay_order_id + "|" + razorpay_payment_id)
-      .digest("hex");
-
-    if (generated_signature !== razorpay_signature) {
-      return res.status(400).json({ success: false, message: "Invalid signature" });
-    }
-
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
-
-    let courseEntry = user.enrolledCourses.find(c => c.courseId && c.courseId.toString() === courseId);
-
-    if (!courseEntry) {
-      user.enrolledCourses.push({
-        courseId,
-        status: "unlocked",
-        enrolledAt: new Date()
-      });
-      console.log(`✅ New course entry added for user ${user._id}, course ${courseId}`);
-    } else {
-      courseEntry.status = "unlocked";
-      console.log(`✅ Existing course unlocked for user ${user._id}, course ${courseId}`);
-    }
-
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Payment verified & course unlocked",
-      enrolledCourses: user.enrolledCourses
-    });
-
-  } catch (err) {
-    console.error("❌ Verify & Unlock error:", err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-};
