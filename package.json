@@ -10,7 +10,6 @@
     "node": ">=18.17 <23"
   },
   "scripts": {
-    "postinstall": "npm -w Frontend1 i && ( [ -d backend1 ] && npm -w backend1 i || true )",
     "dev": "npm -w Frontend1 run dev || npm -w Frontend1 run start",
     "dev:full": "concurrently -n web,api -c auto \"npm -w Frontend1 run dev || npm -w Frontend1 run start\" \"npm -w backend1 run dev || npm -w backend1 start\"",
     "start": "npm -w Frontend1 run start || npm -w Frontend1 run preview"
