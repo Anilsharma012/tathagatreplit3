@@ -1,0 +1,20 @@
+﻿# Node/React
+node_modules/
+dist/
+build/
+.vite/
+.cache/
+npm-debug.log*
+yarn-error.log*
+# Replit junk
+.local/
+replit.nix
+.replit
+# Env
+.env
+.env.*.local
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
