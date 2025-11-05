@@ -1,0 +1,61 @@
+**Prompt for Designing a Student LMS Mock Test Interface**
+
+**Objective:** Create a user-friendly mock test interface for a Learning Management System (LMS) that allows students to navigate through various test options and access their desired exam materials efficiently.
+
+**Instructions for AI Response:**
+
+1. **Main Menu Design:**
+   - Create an initial menu with options: 
+     - Previous Year Papers
+     - Full-Length Tests
+     - Sessional Tests
+     - Module Tests
+   - Each option should be represented by a button.
+
+2. **Sub-Menu for Previous Year Papers:**
+   - Upon clicking "Previous Year Papers," generate two additional buttons:
+     - Paper Wise
+     - Topic Wise
+
+3. **Paper Wise Option:**
+   - When "Paper Wise" is selected, display a dropdown menu containing the following exams:
+     - CAT
+     - SNAP
+     - XAT
+     - XSAT
+   - Ensure that this dropdown is populated dynamically by the admin.
+
+4. **Topic Wise Option:**
+   - When "Topic Wise" is selected, provide a dropdown menu with the following topics:
+     - Verbal
+     - LRDI (Logical Reasoning and Data Interpretation)
+     - Quantitative Aptitude
+   - Allow the admin to customize the topics listed here.
+
+5. **Sub-Topics for Each Main Topic:**
+   - When a main topic is selected (e.g., Verbal), create a further dropdown for sub-topics such as:
+     - Geometry
+     - Reading Comprehension (RC)
+   - Ensure that these sub-topics can be added or modified by the admin as needed.
+
+6. **Full-Length Tests Section:**
+   - In the "Full-Length Tests" menu, include options for:
+     - CAT
+     - XAT
+     - SNAP
+   - Allow the admin to add any other relevant full-length tests.
+
+7. **Test Declaration:**
+   - After a test is selected, display a declaration message that students must acknowledge before proceeding.
+
+8. **Test Interface Style:**
+   - Once the declaration is accepted, the interface should transition to a mock test format styled like CAT (Common Admission Test), providing a realistic exam experience.
+
+9. **User Experience Considerations:**
+   - Ensure that navigation between menus and sub-menus is intuitive and easy to follow.
+   - Include visual elements such as buttons, dropdowns, and confirmation messages to enhance usability.
+
+10. **Admin Control:**
+   - Specify that all elements (subjects, topics, sub-topics) are manageable by the admin through a backend interface.
+
+**End of Prompt**

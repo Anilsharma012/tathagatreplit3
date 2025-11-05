@@ -671,6 +671,8 @@ safeUse("/api/discussions", "./routes/DiscussionRoute");
 safeUse("/api/admin/discussions", "./routes/AdminDiscussionRoute");
 safeUse("/api/mock-tests", "./routes/MockTestRoute");
 safeUse("/api/admin/mock-tests", "./routes/AdminMockTestRoute");
+safeUse("/api/categorized-mock-tests", "./routes/CategorizedMockTestRoute");
+safeUse("/api/admin/categorized-mock-tests", "./routes/AdminCategorizedMockTestRoute");
 safeUse("/api/progress", "./routes/UserProgressRoute");
 safeUse("/api/student", "./routes/StudentCourseRoute");
 safeUse("/api/sample", "./routes/sampleData");

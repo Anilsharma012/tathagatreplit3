@@ -70,6 +70,10 @@ import MockTestPage from "./pages/Student/MockTests/MockTestPage";
 import MockTestInstructions from "./pages/Student/MockTests/MockTestInstructions";
 import MockTestTerms from "./pages/Student/MockTests/MockTestTerms";
 import MockTestAttempt from "./pages/Student/MockTests/MockTestAttempt";
+import MockTestSelection from "./pages/Student/MockTests/MockTestSelection";
+import PreviousYearPapers from "./pages/Student/MockTests/PreviousYearPapers";
+import FullLengthTests from "./pages/Student/MockTests/FullLengthTests";
+import TestDeclaration from "./pages/Student/MockTests/TestDeclaration";
 import CourseViewer from "./pages/Student/CourseViewer/CourseViewer";
 import StudentCourseContentManager from "./pages/Student/CourseContentManager/StudentCourseContentManager";
 import StudentMyProgress from "./pages/Student/Progress/StudentMyProgress";
@@ -512,7 +516,13 @@ const AppContent = () => {
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="practice-tests" element={<StudentPracticeTests />} />
           <Route path="practice-tests/:testId/instructions" element={<TestInstructions />} />
-          <Route path="mock-tests" element={<MockTestPage />} />
+          <Route path="mock-tests" element={<MockTestSelection />} />
+          <Route path="mock-tests/previous-year" element={<PreviousYearPapers />} />
+          <Route path="mock-tests/full-length" element={<FullLengthTests />} />
+          <Route path="mock-tests/sessional" element={<MockTestPage />} />
+          <Route path="mock-tests/module" element={<MockTestPage />} />
+          <Route path="mock-tests/declaration/:testId" element={<TestDeclaration />} />
+          <Route path="mock-tests/attempt/:testId" element={<MockTestAttempt />} />
           <Route path="mock-test/:testId/instructions" element={<MockTestInstructions />} />
           <Route path="mock-test/:testId/terms" element={<MockTestTerms />} />
           <Route path="mock-test/:testId/attempt/:attemptId" element={<MockTestAttempt />} />

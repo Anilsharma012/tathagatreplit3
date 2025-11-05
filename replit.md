@@ -19,6 +19,12 @@ Full-stack educational platform for CAT (Common Admission Test) preparation with
 - **External Services**: Razorpay (payments), Zoom (live classes), Nodemailer (emails)
 
 ## Recent Changes
+- **November 5, 2025**: Implemented comprehensive Student LMS Mock Test Interface
+  - Created categorized mock test system with 4 main categories (Previous Year Papers, Full-Length Tests, Sessional Tests, Module Tests)
+  - Built hierarchical test selection flow with Paper Wise and Topic Wise options
+  - Added Test Declaration page with acceptance workflow
+  - Created backend models (TestCategory, CategorizedMockTest) and API endpoints
+  - Integrated new navigation system with existing student routes
 - Imported from GitHub (October 27, 2025)
 - Configured for Replit environment
 - Updated port configuration: Backend (3001), Frontend (5000)
@@ -34,13 +40,19 @@ Full-stack educational platform for CAT (Common Admission Test) preparation with
 
 ## Key Features
 1. Student Dashboard with course progress tracking
-2. Mock test and practice test system
-3. Live class management with Zoom integration
-4. Admin panel for course and content management
-5. Discussion forum
-6. Study materials management
-7. IIM predictor tool
-8. CRM for lead management
+2. **Enhanced Mock Test System** (NEW)
+   - Categorized test navigation (Previous Year Papers, Full-Length Tests, Sessional Tests, Module Tests)
+   - Paper Wise selection (by exam: CAT, XAT, SNAP, XSAT, etc.)
+   - Topic Wise selection (by subject: Verbal, LRDI, Quantitative Aptitude with sub-topics)
+   - Test Declaration page with acceptance workflow
+   - Admin-configurable test categories and hierarchy
+3. Practice test system
+4. Live class management with Zoom integration
+5. Admin panel for course and content management
+6. Discussion forum
+7. Study materials management
+8. IIM predictor tool
+9. CRM for lead management
 
 ## Running the Project
 
@@ -71,3 +83,47 @@ The project uses a single workflow that runs both frontend and backend:
 - Configured for VM deployment (stateful application)
 - Runs the same `dev:full` command that starts both services
 - MongoDB Atlas is used for production database
+
+## New Feature: Categorized Mock Test Interface
+
+### Backend Architecture
+**Models:**
+- `TestCategory.js`: Hierarchical category management (Main → Exam/Topic → SubTopic)
+- `CategorizedMockTest.js`: Extended mock test model with categorization support
+
+**API Endpoints:**
+- Student Routes (`/api/categorized-mock-tests`):
+  - `GET /categories`: Get test categories for navigation
+  - `GET /tests`: Get tests by category filters
+  - `GET /test/:testId/details`: Get test details with declaration
+  - `GET /exams`: Get available exam types
+  - `GET /years`: Get available years for previous year papers
+  - `GET /topics`: Get available topics and subtopics
+
+- Admin Routes (`/api/admin/categorized-mock-tests`):
+  - `POST /categories`: Create test category
+  - `GET /categories`: Get all categories
+  - `PUT /categories/:categoryId`: Update category
+  - `DELETE /categories/:categoryId`: Delete category
+  - `POST /tests`: Create categorized test
+  - `GET /tests`: Get all categorized tests
+  - `PUT /tests/:testId`: Update test
+  - `PUT /tests/:testId/publish`: Toggle test publication
+  - `DELETE /tests/:testId`: Delete test
+
+### Frontend Components
+**Student Pages:**
+- `MockTestSelection.jsx`: Main navigation with 4 category cards
+- `PreviousYearPapers.jsx`: Selection flow with Paper Wise/Topic Wise modes
+- `FullLengthTests.jsx`: Full-length test listing with exam filters
+- `TestDeclaration.jsx`: Test instructions and declaration acceptance page
+
+**Routes:**
+- `/student/mock-tests`: Main test selection page
+- `/student/mock-tests/previous-year`: Previous year papers flow
+- `/student/mock-tests/full-length`: Full-length tests
+- `/student/mock-tests/declaration/:testId`: Test declaration page
+- `/student/mock-tests/attempt/:testId`: Test attempt interface
+
+### Admin Interface (Pending)
+The admin interface for managing test categories and categorized tests is planned for future implementation. Current features can be managed through API endpoints directly.
